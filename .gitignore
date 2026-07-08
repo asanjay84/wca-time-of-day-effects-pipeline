@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Raw WCA data export (download separately, see README)
+WCA_export_*.tsv
+
+# Regenerated WCIF cache (fetched by 00_fetch_wcif_cache.py)
+wcif_cache_public/

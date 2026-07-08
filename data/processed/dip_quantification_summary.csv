@@ -1,0 +1,5 @@
+event,event_label,scale,total_avg_records,total_attempts,dip_window,dip_rate_inside,dip_rate_outside,dip_ratio_out_over_in,dip_abs_diff,dip_records_inside,dip_attempts_inside,dip_p_onetail,rate_units,morning_peak_time,morning_peak_rate,morning_peak_n_records,evening_peak_time,evening_peak_rate,evening_peak_n_records,evening_peak_pct_finals,evening_peak_pct_early,nonuniformity_maxdev_stat,nonuniformity_p
+333,3x3x3 (Ao5),100000,1005,5621173,12:30-15:00,18.6419,17.6546,0.947,-0.9873,238,1276692,0.3849,"records per 100,000 attempts",11:30,23.8782,24,18:00,50.3694,24,79.2,20.8,1.4085,0.1746
+444,4x4x4 (Ao5),50000,914,1565017,12:30-15:00,26.5131,30.2008,1.139,3.6876,225,424318,0.0202,"records per 50,000 attempts",11:45,51.1868,27,17:45,75.5744,20,65.0,35.0,1.499,0.2543
+555,5x5x5 (Ao5),20000,938,790938,12:30-15:00,22.3191,24.2004,1.084,1.8812,226,202517,0.8583,"records per 20,000 attempts",11:30,22.3572,23,18:00,50.1539,22,50.0,50.0,1.0572,0.0531
+666,6x6x6 (Mo3),5000,741,195426,12:30-15:00,16.5289,19.7852,1.197,3.2563,164,49610,0.4928,"records per 5,000 attempts",11:45,26.8405,14,18:30,42.4208,15,100.0,0.0,1.5358,0.0654
