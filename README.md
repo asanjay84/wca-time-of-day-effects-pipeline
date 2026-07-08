@@ -132,7 +132,7 @@ To rebuild the derived tables themselves from raw WCA data:
 
 The underlying competition data is owned and maintained by the World Cube
 Association and published at
-[worldcubeassociation.org/results](https://worldcubeassociation.org/results).
+[[worldcubeassociation.org/export/results](https://www.worldcubeassociation.org/export/results)].
 The derived CSVs in this repo (`new_schedule_multi.csv`, `new_round_table_*.csv`)
 are aggregated/derived from that public export.
 
