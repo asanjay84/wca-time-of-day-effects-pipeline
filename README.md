@@ -138,5 +138,4 @@ The code in this repository is released under the [MIT License](LICENSE).
 
 If you use this code or data, please cite:
 
-> [Add full citation for "Time-of-Day Effects on Competitive Speedcubing
-> Performance," Journal of Circadian Rhythms, 2026]
+> [Adireddi, S. (2026). Time-of-Day Effects on Competitive Speedcubing Performance. Journal of Circadian Rhythms, 24(1). https://doi.org/10.5334/jcr.266]
