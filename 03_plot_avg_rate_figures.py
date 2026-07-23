@@ -1,6 +1,4 @@
 """
-clean5_avg_analysis_multi.py
-============================
 Run exposure-adjusted time-of-day analysis for AVERAGE (Ao5/Mo3) records
 across 333, 444, 555, 666.
 
@@ -32,9 +30,9 @@ import matplotlib.gridspec as gridspec
 import warnings
 warnings.filterwarnings("ignore")
 
-# ============================================================
+
 # CONFIG
-# ============================================================
+
 EVENTS    = ["333", "444", "555", "666"]
 N_PERMS   = 10_000
 RNG_SEED  = 42
@@ -59,9 +57,9 @@ EVENT_COLORS = {
 NULL_COLOR = "#d9d9d9"
 NULL_EDGE  = "#999999"
 
-# ============================================================
+
 # HELPERS
-# ============================================================
+
 def choose_scale(total_records, total_attempts):
     if total_attempts == 0 or total_records == 0:
         return 10_000
@@ -206,9 +204,9 @@ def hour_label(h):
     return f"{hh:02d}:{mm:02d}"
 
 
-# ============================================================
+
 # MAIN LOOP
-# ============================================================
+
 results_store = {}
 
 for event in EVENTS:
@@ -248,12 +246,12 @@ for event in EVENTS:
     bins_plot = bins_all[bins_all["n_attempts"] >= min_att]
     print(f"  Bins with data: {len(bins_all)} | Passing filter: {len(bins_plot)}")
 
-    # --- Permutation test ---
+    # Permutation test
     print("  Running permutation test...")
     perm = run_permutation(df_s, scale, min_att)
     print(f"    Competitions used: {perm['n_comps']}")
 
-    # --- Regression ---
+    # Regression
     print("  Running regression...")
     model = run_regression(df_s)
     if model:
@@ -270,7 +268,7 @@ for event in EVENTS:
         })
         reg_table.to_csv(f"avg_regression_{event}.csv", index=False)
 
-    # --- Summary stats ---
+    # Summary stats
     if len(bins_plot) > 0:
         peak_row   = bins_plot.loc[bins_plot["rate_scaled"].idxmax()]
         trough_row = bins_plot.loc[bins_plot["rate_scaled"].idxmin()]
@@ -306,9 +304,9 @@ for event in EVENTS:
     })
     perm_out.to_csv(f"avg_permutation_{event}.csv", index=False)
 
-    # ----------------------------------------------------------------
+    
     # Per-event figure
-    # ----------------------------------------------------------------
+    
     color = EVENT_COLORS[event]
     label = EVENT_LABELS[event]
 
@@ -350,9 +348,9 @@ for event in EVENTS:
     print(f"  Saved: avg_fig_{event}_rate.png")
 
 
-# ============================================================
+
 # COMBINED COGNITIVE GRADIENT FIGURE
-# ============================================================
+
 print("\n" + "="*55)
 print("  COMBINED COGNITIVE GRADIENT FIGURE (Avg records)")
 print("="*55)
