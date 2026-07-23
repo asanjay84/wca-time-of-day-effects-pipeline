@@ -1,10 +1,10 @@
 # Time-of-Day Effects on Competitive Speedcubing Performance
 
-Code and data supporting the exposure-adjusted, time-of-day analysis of World Cube
-Association (WCA) record-breaking published in the *Journal of Circadian Rhythms*
+Code and data supporting a sample time-of-day analysis of World Cube
+Association (WCA) records. Similar pipeline was used to publish in the *Journal of Circadian Rhythms*
 as "Time-of-Day Effects on Competitive Speedcubing Performance."
 
-This repository contains the subset of the project's analysis pipeline that
+This repository contains a subset of the project's analysis pipeline that
 produces:
 - The average-record rate figures for 3x3x3 through 6x6x6 (`avg_fig_333_rate.png`,
   `avg_fig_444_rate.png`, `avg_fig_555_rate.png`, `avg_fig_666_rate.png`)
@@ -13,16 +13,13 @@ produces:
 - The post-prandial dip / evening-spike quantification behind those figures
   (`data/processed/dip_quantification_summary.csv`)
 
-It is a focused reproduction package, not the full research history — it leaves
-out exploratory notebooks/scripts that didn't feed into these results.
-
 ## What the analysis does
 
 For each event (333, 444, 555, 666), every competition round is assigned a local
 clock time (from the competition's published schedule) and binned into 15-minute
 buckets. Record-breaking rate is computed as **records / attempts** within each
-bucket — an exposure-adjusted rate, not a raw count — so that bins with more
-competitors don't look artificially "more record-prone." A within-competition
+bucket — an exposure-adjusted rate — so that bins with more
+competitors don't look artificially more record-prone. A within-competition
 permutation test builds a null distribution that respects each competition's own
 schedule, and a Poisson regression tests for a time-of-day effect after
 controlling for round stage (final vs. early) and year.
@@ -58,13 +55,13 @@ WCA_export_Results.tsv ──────────┤
   -> avg_regression_*.csv            _summary.csv            counts_*.png
 ```
 
-Scripts `01`–`05` are unmodified copies of the exact code used for the paper
-(only renamed, for clarity of run order).
+Scripts `01`–`05` are modified copies of the exact code used for the paper
+(renamed for clarity of run order).
 
-## Quick start — reproduce the figures in seconds
+## Quick start
 
 The derived data tables (`new_schedule_multi.csv`, `new_round_table_*.csv`) are
-already included in this repo, so you can regenerate the actual paper figures
+already included in this repo, so you can generate figures
 without touching WCA's raw export or the WCIF cache:
 
 ```bash
@@ -92,24 +89,23 @@ To rebuild the derived tables themselves from raw WCA data:
    > separate `result_attempts` table, no `value1`-`value5`) in early 2026. A
    > freshly downloaded export today will use that new schema, so
    > `02_build_round_tables.py` (which expects the old column names) will need
-   > small column-name adjustments before it will run against a v2 export. This
-   > repo documents that limitation rather than working around it.
+   > small column-name adjustments before it will run against a v2 export.
 
 2. **Fetch the competition schedules:**
    ```bash
    python 00_fetch_wcif_cache.py
    ```
-   This calls the public WCA API once per competition (rate-limited to be
-   polite), so it takes roughly an hour and produces `wcif_cache_public/`
+   This calls the public WCA API once per competition so
+   it takes roughly an hour and produces `wcif_cache_public/`
    (~2.4GB of cached JSON, not committed to this repo).
 
-3. **Build the schedule and round tables:**
+4. **Build the schedule and round tables:**
    ```bash
    python 01_build_schedule.py
    python 02_build_round_tables.py
    ```
 
-4. Then run `03`–`05` as in the quick start above.
+5. Then run `03`–`05` as in the quick start above.
 
 ## Repository contents
 
