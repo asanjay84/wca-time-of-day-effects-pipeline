@@ -1,6 +1,4 @@
 """
-clean4_tables_multi.py
-======================
 Build round-level data tables for 333, 444, 555, 666, 333fm.
 
 For each (competitionId, eventId, roundTypeId):
@@ -18,7 +16,7 @@ EVENTS = ["333", "444", "555", "666", "333fm"]
 CONTINENTAL = {"AfR", "AsR", "ER", "NAR", "OcR", "SAR"}
 VAL_COLS = ["value1", "value2", "value3", "value4", "value5"]
 
-# ── Load support tables ───────────────────────────────────────────────────────
+# Load support tables
 print("Loading support tables...")
 sched = pd.read_csv("new_schedule_multi.csv",
                     usecols=["competitionId", "eventId", "roundTypeId",
@@ -36,7 +34,7 @@ rt["round_stage"] = rt["is_final"].map({True: "Final", False: "Early"})
 
 print(f"  Schedule: {len(sched):,} rows covering {sched['eventId'].unique().tolist()}")
 
-# ── Stream Results TSV once, keeping all target events ───────────────────────
+# Stream Results TSV once, keeping all target events
 print("\nStreaming Results TSV...")
 USECOLS = (["competitionId", "eventId", "roundTypeId", "personId",
             "regionalSingleRecord", "regionalAverageRecord"] + VAL_COLS)
@@ -62,7 +60,7 @@ for event in EVENTS:
         results_by_event[event] = pd.DataFrame(columns=USECOLS)
         print(f"  {event}: 0 rows")
 
-# ── Process each event ────────────────────────────────────────────────────────
+# Process each event
 def process_event(event_id, results):
     """Build round-level table for one event."""
     if len(results) == 0:
