@@ -1,6 +1,4 @@
 """
-clean3_schedule_multi.py
-========================
 Parse WCIF cache to extract round start times (local) for:
   333, 444, 555, 666, 333fm
 
@@ -26,10 +24,10 @@ import pytz
 
 CACHE_DIR = "wcif_cache_public"
 EVENTS    = ["333", "444", "555", "666", "333fm"]
-# FMC uses codes like 333fm-r1-a1 (attempt sub-activities); we capture round number and ignore attempt suffix
+# FMC uses codes like 333fm-r1-a1 (attempt sub-activities), so we capture round number and ignore attempt suffix
 ACT_RE    = re.compile(r"^(" + "|".join(re.escape(e) for e in EVENTS) + r")-r(\d+)(?:-a\d+)?$")
 
-# ── 1. Parse WCIF cache ───────────────────────────────────────────────────────
+# Parse WCIF cache
 print("Parsing WCIF cache...")
 files = [f for f in os.listdir(CACHE_DIR) if f.endswith(".json")]
 print(f"  {len(files):,} files found")
@@ -85,7 +83,7 @@ print(f"\nEvent coverage:")
 print(sched_df.groupby("eventId")[["competitionId"]].nunique().rename(
     columns={"competitionId": "n_competitions"}))
 
-# ── 2. Build round_type_id -> round_number mapping from Results TSV ───────────
+# Build round_type_id -> round_number mapping from Results TSV
 print("\nBuilding round_type -> round_number mapping from Results TSV...")
 
 USECOLS_R = ["competitionId", "eventId", "roundTypeId"]
@@ -113,14 +111,14 @@ results_slim["round_number"] = results_slim.groupby(
 rt_map = results_slim[["competitionId", "eventId", "roundTypeId", "round_number"]]
 print(f"  Mapping rows: {len(rt_map):,}")
 
-# ── 3. Deduplicate schedule (keep earliest per comp/event/round_number) ────────
+# Deduplicate schedule (keep earliest per comp/event/round_number)
 sched_dedup = (sched_df
     .dropna(subset=["local_hour"])
     .sort_values("local_hour")
     .drop_duplicates(subset=["competitionId", "eventId", "round_number"])
 )
 
-# ── 4. Join: schedule + round_type mapping ────────────────────────────────────
+# Join: schedule + round_type mapping
 combined = sched_dedup.merge(rt_map, on=["competitionId", "eventId", "round_number"],
                              how="inner")
 
