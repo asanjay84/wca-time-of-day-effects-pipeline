@@ -1,6 +1,4 @@
 """
-clean6_dip_spike_quantification.py
-====================================
 Quantify post-prandial dip and late-evening spike for 333, 444, 555, 666.
 Uses AVERAGE (Ao5/Mo3) records from new_round_table_{event}.csv.
 
@@ -23,7 +21,7 @@ import scipy.stats as stats
 
 os.makedirs("data/processed", exist_ok=True)
 
-# ── CONFIG ────────────────────────────────────────────────────────────────────
+# CONFIG
 EVENTS     = ["333", "444", "555", "666"]
 N_PERMS    = 10_000
 RNG_SEED   = 42
@@ -45,7 +43,7 @@ DIP_END   = 15.0   # 15:00 exclusive (bins 12:30, 12:45, ..., 14:45)
 EVE_START = 17.0   # evening spike: bins >= 17:00
 MORN_END  = 12.0   # morning peak: bins < 12:00
 
-# ── HELPERS ───────────────────────────────────────────────────────────────────
+# HELPERS
 def choose_scale(total_records, total_attempts):
     if total_attempts == 0 or total_records == 0:
         return 10_000
@@ -213,7 +211,7 @@ def run_permutation(df_s, record_col, scale, min_att, n_perms, seed):
     }
 
 
-# ── MAIN ─────────────────────────────────────────────────────────────────────
+# MAIN
 rows = []
 
 for event in EVENTS:
@@ -244,7 +242,7 @@ for event in EVENTS:
     res = run_permutation(df_s, RECORD_COL, scale, min_att, N_PERMS, RNG_SEED)
     bins_all = res["bins_all"]
 
-    # ── 1. DIP ────────────────────────────────────────────────────────────────
+    # DIP
     dip_rate = res["obs_dip_rate"]
     out_rate = res["obs_out_rate"]
     ratio    = res["obs_ratio"]
@@ -258,7 +256,7 @@ for event in EVENTS:
     print(f"    Abs diff:    {abs_diff:.2f} per {scale:,} attempts")
     print(f"    One-tailed perm p (outside > inside): {p_dip:.4f}")
 
-    # ── 2. MORNING PEAK ───────────────────────────────────────────────────────
+    # MORNING PEAK
     bins_morn = bins_all[(bins_all["bin_15min"] < MORN_END) &
                          (bins_all["n_att"] >= min_att)]
     if len(bins_morn) > 0:
@@ -276,7 +274,7 @@ for event in EVENTS:
     print(f"\n  [MORNING PEAK <12:00]")
     print(f"    Peak bin: {morn_peak_time} -> {morn_peak_rate:.2f} per {scale:,}  ({morn_peak_n} records, {morn_peak_att:,} attempts)")
 
-    # ── 3. EVENING SPIKE ──────────────────────────────────────────────────────
+    # EVENING SPIKE
     bins_eve = bins_all[(bins_all["bin_15min"] >= EVE_START) &
                         (bins_all["n_att"] >= min_att)]
     if len(bins_eve) > 0:
@@ -307,7 +305,7 @@ for event in EVENTS:
     print(f"    Finals records in peak bin:  {int(finals_rec)} ({pct_finals:.1f}%)")
     print(f"    Early records in peak bin:   {int(early_rec)} ({pct_early:.1f}%)")
 
-    # ── 4. OVERALL NON-UNIFORMITY ─────────────────────────────────────────────
+    # OVERALL NON-UNIFORMITY
     p_nonunif = res["p_nonuniform"]
     print(f"\n  [OVERALL NON-UNIFORMITY]")
     print(f"    Max-deviation stat (obs/mean): {res['obs_maxdev']:.3f}")
@@ -345,7 +343,7 @@ for event in EVENTS:
     })
 
 
-# ── SAVE + PRINT SUMMARY TABLE ───────────────────────────────────────────────
+# SAVE + PRINT SUMMARY TABLE
 summary = pd.DataFrame(rows)
 summary.to_csv("data/processed/dip_quantification_summary.csv", index=False)
 print(f"\n\nSaved: data/processed/dip_quantification_summary.csv")
