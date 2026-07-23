@@ -1,7 +1,5 @@
 """
-clean7_raw_count_figures.py
-============================
-Generate raw record count distribution figures for the manuscript.
+Generate raw record count distribution figures.
 
 Figure 1: Single panel — 333 combined (single+avg) records by local time.
 Figure 2: 2x2 grid — 333, 444, 555, 666 combined records, same format.
@@ -25,7 +23,7 @@ import matplotlib.ticker as ticker
 
 os.makedirs("figures", exist_ok=True)
 
-# ── Style constants (match cognitive gradient) ────────────────────────────────
+# Style constants (match cognitive gradient)
 EVENT_COLORS = {
     "333": "#2166ac",
     "444": "#4dac26",
@@ -46,7 +44,7 @@ NR_COL     = "n_nr"
 
 XMIN = 6.0    # 06:00
 XMAX = 22.0   # 22:00
-BIN_W = 0.22  # bar width slightly narrower than 0.25 for spacing
+BIN_W = 0.22  # bar width slightly < 0.25 for spacing
 
 # matplotlib global style
 plt.rcParams.update({
@@ -125,7 +123,7 @@ def draw_panel(ax, grp, event, total_rec, total_wr, total_cr, total_nr,
         fontsize=12, color=color, fontweight="bold", pad=6,
     )
 
-    # Annotation: n in top-right corner (redundant but clear for print)
+    # Annotation: n in top-right corner (clear for print)
     ax.text(0.98, 0.97,
             f"n = {total_rec:,}",
             transform=ax.transAxes, ha="right", va="top",
@@ -134,9 +132,9 @@ def draw_panel(ax, grp, event, total_rec, total_wr, total_cr, total_nr,
                       ec=color, alpha=0.85, linewidth=0.8))
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # FIGURE 1 — 333 single panel
-# ══════════════════════════════════════════════════════════════════════════════
+
 print("Building Figure 1 (333 raw counts)...")
 
 grp333, n333, wr333, cr333, nr333 = load_bins("333")
@@ -162,9 +160,9 @@ plt.close(fig1)
 print("  Saved: figures/figure_raw_counts_333.png")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 # FIGURE 2 — 444 / 555 / 666 (2x2 grid, 4th panel hidden)
-# ══════════════════════════════════════════════════════════════════════════════
+
 print("Building Figure 2 (333/444/555/666 raw counts)...")
 
 data = {}
